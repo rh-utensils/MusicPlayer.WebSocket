@@ -11,6 +11,7 @@ const server = express()
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server);
+io.origins(['https://music.hampoelz.net']);
 
 io.on('connection', (socket) => {
   console.log('Client connected');
