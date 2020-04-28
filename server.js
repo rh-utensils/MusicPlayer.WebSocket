@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const uuid = require('node-uuid');
 const socketIO = require('socket.io');
 
 const PORT = process.env.PORT || 3000;
