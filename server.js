@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 3000;
 const INDEX = '/index.html';
 
 const server = express()
-  .use((_, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+	.use((_, res) => res.sendFile(INDEX, { root: __dirname }))
+	.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 // Create and configure socket.io 
 const io = socketIO(server);
@@ -18,9 +18,9 @@ const io = socketIO(server);
 var sockets = {};
 
 io.on('connection', (socket) => {
-  console.log('Client connected');
+	console.log('Client connected');
 
-  var id;
+	var id;
 
 	// Fetermine an identifier that is unique for us.
 
