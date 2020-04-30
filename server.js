@@ -15,25 +15,10 @@ const server = express()
 const io = socketIO(server);
 //io.origins(['https://music.hampoelz.net']);
 
-var console = {};
-console.log = message => {
-	var date = new Date;
-
-	var seconds = date.getSeconds();
-	var minutes = date.getMinutes();
-	var hour = date.getHours();
-
-	io.emit('log', "[" + hour + ":" + minutes + ":" + seconds + "] => " + message + "\n");
-};
-
 // keeping track of connections
 var sockets = {};
 
 io.on('connection', (socket) => {
-	console.log('Client connected');
-
-	console.log(sockets.toString());
-	
 	var id;
 
 	// Fetermine an identifier that is unique for us.
@@ -45,14 +30,12 @@ io.on('connection', (socket) => {
 	// We have a unique identifier that can be sent to the client
 
 	sockets[id] = socket;
-	socket.emit('room-id', id);
+	socket.emit('season-id', id);
 
 	// Remove references to the disconnected socket
 	socket.on('disconnect', () => {
 		sockets[socket] = undefined;
 		delete sockets[socket];
-
-		console.log('Client disconnected')
 	});
 
 	// When a message is received forward it to the addressee
