@@ -30,33 +30,27 @@ io.on('connection', (socket) => {
 		delete sockets[socket];
 	});
 
-	try {
-		socket.on('message', (message) => {
-			if (sockets[message.to]) {
-				sockets[message.to].emit('message', message);
-			} else {
-				socket.emit('disconnected', message.from);
-			}
-		});
-	
-		socket.on('logon', (message) => {
-			if (sockets[message.to]) {
-				sockets[message.to].emit('logon', message);
-			} else {
-				socket.emit('error', 'Does not exsist at server.');
-			}
-		});
-	
-		socket.on('logoff', (message) => {
-			if (sockets[message.to]) {
-				sockets[message.to].emit('logoff', message);
-			} else {
-				socket.emit('error', 'Does not exsist at server.');
-			}
-		});
-	} catch (error) {
-		socket.emit('error', error);
-	}
+	socket.on('message', (message) => {
+		if (sockets[message.to]) {
+			sockets[message.to].emit('message', message);
+		} else {
+			socket.emit('disconnected', message.from);
+		}
+	});
 
+	socket.on('logon', (message) => {
+		if (sockets[message.to]) {
+			sockets[message.to].emit('logon', message);
+		} else {
+			socket.emit('info', 'Not Found');
+		}
+	});
 
+	socket.on('logoff', (message) => {
+		if (sockets[message.to]) {
+			sockets[message.to].emit('logoff', message);
+		} else {
+			socket.emit('info', 'Not Found');
+		}
+	});
 });
