@@ -3,9 +3,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       let socket = io();
-      var log = document.getElementById("log");
+      var log;
       
       socket.on('log', message => {
+        log = document.getElementById("log");
         log.value += "[" + hour + ":" + minutes + ":" + seconds + "] => " + message + "\n";
       });
     </script>
