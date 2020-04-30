@@ -52,12 +52,4 @@ io.on('connection', (socket) => {
 			socket.emit('info', 'Not Found');
 		}
 	});
-
-	socket.on('logoff', (message) => {
-		if (sockets[message.to]) {
-			sockets[message.to].emit('logoff', message);
-		} else {
-			socket.emit('info', 'Not Found');
-		}
-	});
 });
