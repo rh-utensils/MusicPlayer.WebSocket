@@ -25,7 +25,6 @@ console.log = message => {
 
 	io.emit('log', "[" + hour + ":" + minutes + ":" + seconds + "] => " + message + "\n");
 };
-window.console = console;
 
 // keeping track of connections
 var sockets = {};
