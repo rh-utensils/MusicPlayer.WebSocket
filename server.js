@@ -2,7 +2,6 @@
 
 const express = require('express');
 const uuid = require('uuid');
-const os = require('os');
 const socketIO = require('socket.io');
 
 const PORT = process.env.PORT || 3000;
@@ -15,22 +14,13 @@ const server = express()
 const io = socketIO(server);
 //io.origins(['https://music.hampoelz.net']);
 
-if (os.platform() !== 'win32') {
-    io.configure(function() {
-        io.set("transports", ["xhr-polling"]);
-        io.set("polling duration", 10);
-    });
-}
-
-// keeping track of connections
 var sockets = {};
 
 io.on('connection', (socket) => {
 	var id;
 
-	do {
-		id = uuid.v4();
-	} while (sockets[id]);
+	do id = uuid.v4();
+	while (sockets[id]);
 
 	sockets[id] = socket;
 	socket.emit('season-id', id);
