@@ -2,6 +2,7 @@
 
 const express = require('express');
 const uuid = require('uuid');
+const os = require('os');
 const socketIO = require('socket.io');
 
 const PORT = process.env.PORT || 3000;
@@ -11,9 +12,15 @@ const server = express()
 	.use((_, res) => res.sendFile(INDEX, { root: __dirname }))
 	.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-// Create and configure socket.io 
 const io = socketIO(server);
 //io.origins(['https://music.hampoelz.net']);
+
+if (os.platform() !== 'win32') {
+    io.configure(function() {
+        io.set("transports", ["xhr-polling"]);
+        io.set("polling duration", 10);
+    });
+}
 
 // keeping track of connections
 var sockets = {};
@@ -21,24 +28,18 @@ var sockets = {};
 io.on('connection', (socket) => {
 	var id;
 
-	// Fetermine an identifier that is unique for us.
-
 	do {
 		id = uuid.v4();
 	} while (sockets[id]);
 
-	// We have a unique identifier that can be sent to the client
-
 	sockets[id] = socket;
 	socket.emit('season-id', id);
 
-	// Remove references to the disconnected socket
 	socket.on('disconnect', () => {
 		sockets[socket] = undefined;
 		delete sockets[socket];
 	});
 
-	// When a message is received forward it to the addressee
 	socket.on('message', (message) => {
 		if (sockets[message.to]) {
 			sockets[message.to].emit('message', message);
@@ -47,7 +48,6 @@ io.on('connection', (socket) => {
 		}
 	});
 
-	// When a listener logs on let the media streaming know about it
 	socket.on('logon', (message) => {
 		if (sockets[message.to]) {
 			sockets[message.to].emit('logon', message);
@@ -64,5 +64,3 @@ io.on('connection', (socket) => {
 		}
 	});
 });
-
-setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
