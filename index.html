@@ -7,7 +7,7 @@
       
       socket.on('log', message => {
         log = document.getElementById("log");
-        log.value += "[" + hour + ":" + minutes + ":" + seconds + "] => " + message + "\n";
+        log.value += message;
       });
     </script>
   </head>
