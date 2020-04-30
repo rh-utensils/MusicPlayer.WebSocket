@@ -26,6 +26,13 @@ io.on('connection', (socket) => {
 	socket.emit('season-id', id);
 
 	socket.on('disconnect', () => {
+
+		Object.keys(sockets).forEach(id => {
+			if (sockets[id] === socket) {
+				io.sockets.emit('disconnected', id);
+			}
+		  });
+
 		sockets[socket] = undefined;
 		delete sockets[socket];
 	});
